@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #247ba0 0%, #70c1b3 50%, #f3ffbd 100%);
+            padding: 20px;
+            color: #263238;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1d3557 0%, #457b9d 100%);
+            padding: 42px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        header p {
+            font-size: 1.15em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #247ba0;
+            transition: transform 0.2s;
+        }
+
+        .section:hover {
+            transform: translateX(5px);
+        }
+
+        .section h2 {
+            color: #1d3557;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .section p,
+        .section li {
+            margin-bottom: 10px;
+            font-size: 1.08em;
+        }
+
+        .section ul {
+            margin-left: 22px;
+        }
+
+        .playground {
+            background: #e8f7f4;
+            border: 2px solid #70c1b3;
+            border-radius: 12px;
+            padding: 22px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .playground h2 {
+            color: #0b525b;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .practice-button {
+            margin-top: 15px;
+            padding: 12px 18px;
+            background: #247ba0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .practice-button:hover {
+            background: #1d5f7c;
+        }
+
+        .example {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: "Courier New", monospace;
+            border: 2px dashed #247ba0;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .teacher-note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .teacher-note strong {
+            color: #c45100;
+        }
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .command-card {
+            background: white;
+            border: 1px solid #d8e2e6;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-card h3 {
+            color: #247ba0;
+            margin-bottom: 10px;
+            font-size: 1.15em;
+        }
+
+        .command-card code {
+            display: block;
+            background: #1d2733;
+            color: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: "Courier New", monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .command-card p {
+            margin: 12px 0 0;
+            color: #4b5963;
+            font-size: 1em;
+        }
+
+        .steps {
+            counter-reset: steps;
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .steps li {
+            counter-increment: steps;
+            position: relative;
+            padding-left: 44px;
+        }
+
+        .steps li::before {
+            content: counter(steps);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .quiz-section {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd166 100%);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .quiz-section h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-section > p {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.08em;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .question h3 {
+            color: #1d3557;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            margin-left: 10px;
+        }
+
+        .options label {
+            display: block;
+            padding: 10px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .options label:hover {
+            background: #e9ecef;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #1d3557;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #12243d;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.pass {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .result.fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        footer {
+            padding: 22px 30px;
+            background: #f8f9fa;
+            color: #4b5963;
+            text-align: center;
+            border-top: 1px solid #d8e2e6;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 10px;
+            }
+
+            header {
+                padding: 34px 20px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .content,
+            .quiz-section {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .command-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .example,
+            .command-card code {
+                white-space: normal;
+                overflow-wrap: anywhere;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧪 DOM Manipulation Practice</h1>
+            <p>A simple guide for testing webpage changes with Inspect Element</p>
+        </header>
+
+        <div class="content">
+            <div class="section">
+                <h2>🧩 What is DOM Manipulation?</h2>
+                <p>The <strong>DOM</strong> is the browser's live version of a webpage. It includes the page title, headings, paragraphs, buttons, colors, and styles.</p>
+                <p><strong>DOM manipulation</strong> means using JavaScript to change something on the page after it loads. For example, you can change text, colors, button labels, or the page title.</p>
+                <div class="teacher-note">
+                    <strong>Teacher note:</strong> Changes made in Inspect Element or the Console only affect your screen. Refreshing the page brings the original version back.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎛️ Practice Area</h2>
+                <p>This is the part of the page your commands can change. Open the browser Console, paste one command at a time, and watch what happens.</p>
+
+                <div class="playground">
+                    <h2>Original Page Title</h2>
+                    <p>This paragraph is here so you can see color, size, and background changes clearly.</p>
+                    <button class="practice-button" type="button">Original Button</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔍 How to Test the Commands</h2>
+                <ol class="steps">
+                    <li>Open this page in a browser like Chrome, Edge, or Firefox.</li>
+                    <li>Right-click anywhere on the page and choose <strong>Inspect</strong> or <strong>Inspect Element</strong>.</li>
+                    <li>Click the <strong>Console</strong> tab in the panel that opens.</li>
+                    <li>Copy one command below, paste it into the Console, and press <strong>Enter</strong>.</li>
+                    <li>Refresh the page when you want to undo your changes.</li>
+                </ol>
+            </div>
+
+            <div class="section">
+                <h2>⌨️ Commands to Try</h2>
+                <p>Each command starts with <strong>document</strong>, which means JavaScript is talking to the webpage document.</p>
+
+                <div class="command-grid">
+                    <div class="command-card">
+                        <h3>Change all text color</h3>
+                        <code>document.body.style.color = "blue";</code>
+                        <p>Makes the text on the page blue.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Change the browser tab title</h3>
+                        <code>document.title = "My New Title";</code>
+                        <p>Changes the title shown in the browser tab.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Change the first heading</h3>
+                        <code>document.querySelector("h1").textContent = "My New Title";</code>
+                        <p>Finds the first h1 heading and replaces its text.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Make the page text huge</h3>
+                        <code>document.body.style.fontSize = "100px";</code>
+                        <p>Makes the page text very large. Refresh to reset it.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Change the page background</h3>
+                        <code>document.body.style.background = "red";</code>
+                        <p>Changes the background behind the page to red.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Change the first button</h3>
+                        <code>document.querySelector("button").textContent = "Click Me!";</code>
+                        <p>Finds the first button and changes the words inside it.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🧠 What These Commands Have in Common</h2>
+                <ul>
+                    <li><strong>document</strong> means the webpage loaded in the browser.</li>
+                    <li><strong>body</strong> means the visible page area.</li>
+                    <li><strong>style</strong> means visual settings like color, size, or background.</li>
+                    <li><strong>querySelector</strong> finds the first matching element, such as <strong>h1</strong> or <strong>button</strong>.</li>
+                    <li><strong>textContent</strong> changes the text inside an element.</li>
+                </ul>
+                <div class="example">
+                    document.querySelector("h1").textContent = "My New Title";
+                </div>
+                <p>In plain English: Find the first heading on the page and change its words to "My New Title."</p>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2>🎯 Quick Check</h2>
+            <p>Answer these 5 questions to check your understanding.</p>
+
+            <form id="quizForm">
+                <div class="question">
+                    <h3>Question 1: What does DOM manipulation mean?</h3>
+                    <div class="options">
+                        <label><input type="radio" name="q1" value="a"> Deleting the internet</label>
+                        <label><input type="radio" name="q1" value="b"> Changing parts of a webpage with JavaScript</label>
+                        <label><input type="radio" name="q1" value="c"> Buying a domain name</label>
+                        <label><input type="radio" name="q1" value="d"> Turning off a computer</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>Question 2: What does this command change? document.title = "My New Title";</h3>
+                    <div class="options">
+                        <label><input type="radio" name="q2" value="a"> The browser tab title</label>
+                        <label><input type="radio" name="q2" value="b"> The first image</label>
+                        <label><input type="radio" name="q2" value="c"> The keyboard</label>
+                        <label><input type="radio" name="q2" value="d"> The Wi-Fi network</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>Question 3: What does querySelector("h1") find?</h3>
+                    <div class="options">
+                        <label><input type="radio" name="q3" value="a"> Every paragraph</label>
+                        <label><input type="radio" name="q3" value="b"> The first h1 heading</label>
+                        <label><input type="radio" name="q3" value="c"> The page background</label>
+                        <label><input type="radio" name="q3" value="d"> The browser history</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>Question 4: Which command changes the page background to red?</h3>
+                    <div class="options">
+                        <label><input type="radio" name="q4" value="a"> document.body.style.background = "red";</label>
+                        <label><input type="radio" name="q4" value="b"> document.title = "red";</label>
+                        <label><input type="radio" name="q4" value="c"> document.querySelector("button") = "red";</label>
+                        <label><input type="radio" name="q4" value="d"> document.body.textContent = "red";</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>Question 5: What happens when you refresh after Console changes?</h3>
+                    <div class="options">
+                        <label><input type="radio" name="q5" value="a"> The original page usually comes back</label>
+                        <label><input type="radio" name="q5" value="b"> The website is changed for everyone forever</label>
+                        <label><input type="radio" name="q5" value="c"> The computer shuts down</label>
+                        <label><input type="radio" name="q5" value="d"> The browser deletes the page</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Quiz 🚀</button>
+            </form>
+
+            <div id="result" class="result"></div>
+        </div>
+
+        <footer>
+            <p>Tip: Try one command at a time. If the page gets messy, refresh and start again.</p>
+        </footer>
+    </div>
+
+    <script>
+        const answers = {
+            q1: "b",
+            q2: "a",
+            q3: "b",
+            q4: "a",
+            q5: "a"
+        };
+
+        document.getElementById("quizForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            let score = 0;
+            const total = 5;
+
+            for (let question in answers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === answers[question]) {
+                    score++;
+                }
+            }
+
+            const percentage = (score / total) * 100;
+            const resultDiv = document.getElementById("result");
+            resultDiv.classList.add("show");
+
+            if (percentage >= 80) {
+                resultDiv.className = "result show pass";
+                resultDiv.innerHTML = `🎉 Awesome! You got ${score} out of ${total} correct! (${percentage}%)<br>You understand the DOM basics.`;
+            } else if (percentage >= 60) {
+                resultDiv.className = "result show pass";
+                resultDiv.innerHTML = `👍 Good job! You got ${score} out of ${total} correct! (${percentage}%)<br>Review the command examples and try again.`;
+            } else {
+                resultDiv.className = "result show fail";
+                resultDiv.innerHTML = `📚 You got ${score} out of ${total} correct (${percentage}%)<br>Read the lesson again, then test the commands in the Console.`;
+            }
+
+            resultDiv.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+    </script>
+</body>
+</html>
