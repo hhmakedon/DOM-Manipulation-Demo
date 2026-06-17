@@ -361,10 +361,16 @@
                 <h2>🎛️ Practice Area</h2>
                 <p>This is the part of the page your commands can change. Open the browser Console, paste one command at a time, and watch what happens.</p>
 
-                <div class="playground">
+                <div class="playground practice-area">
                     <h2>Original Page Title</h2>
                     <p>This paragraph is here so you can see color, size, and background changes clearly.</p>
                     <button class="practice-button" type="button">Original Button</button>
+                </div>
+
+                <div class="teacher-note">
+                    <strong>New selector to remember:</strong> This box has the class <strong>practice-area</strong>.
+                    In JavaScript, type a period before a class name: <strong>.practice-area</strong>.
+                    That lets you change only this practice box instead of the entire page.
                 </div>
             </div>
 
@@ -423,18 +429,51 @@
             </div>
 
             <div class="section">
+                <h2>🎯 Practice Area Commands</h2>
+                <p>These commands are better for practice because they target only the box with the class <strong>practice-area</strong>.</p>
+                <p>Notice the period before the class name. In CSS and JavaScript selectors, <strong>.practice-area</strong> means "find something with this class."</p>
+
+                <div class="command-grid">
+                    <div class="command-card">
+                        <h3>Change only the practice box text color</h3>
+                        <code>document.querySelector(".practice-area").style.color = "blue";</code>
+                        <p>Only the text inside the practice area turns blue.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Change only the practice box background</h3>
+                        <code>document.querySelector(".practice-area").style.background = "red";</code>
+                        <p>Only the practice box background turns red.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Change the practice box heading</h3>
+                        <code>document.querySelector(".practice-area h2").textContent = "My New Title";</code>
+                        <p>Finds the h2 inside the practice area and changes its words.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Change the practice box button</h3>
+                        <code>document.querySelector(".practice-area button").textContent = "Click Me!";</code>
+                        <p>Finds the button inside the practice area and changes its label.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
                 <h2>🧠 What These Commands Have in Common</h2>
                 <ul>
                     <li><strong>document</strong> means the webpage loaded in the browser.</li>
                     <li><strong>body</strong> means the visible page area.</li>
                     <li><strong>style</strong> means visual settings like color, size, or background.</li>
                     <li><strong>querySelector</strong> finds the first matching element, such as <strong>h1</strong> or <strong>button</strong>.</li>
+                    <li><strong>.practice-area</strong> finds an element with the class <strong>practice-area</strong>.</li>
                     <li><strong>textContent</strong> changes the text inside an element.</li>
                 </ul>
                 <div class="example">
-                    document.querySelector("h1").textContent = "My New Title";
+                    document.querySelector(".practice-area h2").textContent = "My New Title";
                 </div>
-                <p>In plain English: Find the first heading on the page and change its words to "My New Title."</p>
+                <p>In plain English: Find the heading inside the practice area and change its words to "My New Title."</p>
             </div>
         </div>
 
